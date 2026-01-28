@@ -4,6 +4,7 @@ import Credentials from "next-auth/providers/credentials"
 import { compare } from "bcryptjs"
 import { db } from "~/server/db";
 import { signInSchema } from "~/schemas/auth";
+import { env } from "~/env";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -33,7 +34,7 @@ declare module "next-auth" {
  */
 export const authConfig = {
   session: {
-    strategy: "database",
+    strategy: "jwt",
   },
   providers: [
     Credentials({
@@ -76,12 +77,20 @@ export const authConfig = {
   ],
   adapter: PrismaAdapter(db),
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        // token.role = user.role;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        // session.user.role = token.role as Role;
+      }
+      return session;
+    },
   },
+  secret: env.AUTH_SECRET,
 } satisfies NextAuthConfig;
