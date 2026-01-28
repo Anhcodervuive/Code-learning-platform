@@ -1,11 +1,10 @@
-"use client";
-import { useTheme } from "next-themes";
+import { auth } from "~/server/auth";
 import { UserMenu } from "../_components/header/user-menu";
 
 
-export default function Header() {
-    const { theme, setTheme } = useTheme();
-
+export default async function Header() {
+    const session = await auth()
+    console.log(session);
 
     return (
         <header className="border-b border-border bg-background">
@@ -15,19 +14,8 @@ export default function Header() {
                     <a className="btn-ghost">Problems</a>
                     <a className="btn-ghost">Learn</a>
                     <a className="btn-ghost">Contest</a>
-                    <button
-                        onClick={() => {
-                            if (theme === "dark") {
-                                setTheme("light");
-                            } else {
-                                setTheme("dark");
-                            }
-                        }}
-                        className="btn-primary"
-                    >
-                        {theme === "dark" ? "Light" : "Dark"}
-                    </button>
-                    <UserMenu />
+
+                    <UserMenu user={session?.user} />
                 </nav>
             </div>
         </header>
