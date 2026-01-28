@@ -1,5 +1,6 @@
 "use client";
 import { useTheme } from "next-themes";
+import { UserMenu } from "../_components/header/user-menu";
 
 
 export default function Header() {
@@ -26,6 +27,7 @@ export default function Header() {
                     >
                         {theme === "dark" ? "Light" : "Dark"}
                     </button>
+                    <UserMenu />
                 </nav>
             </div>
         </header>
