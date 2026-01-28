@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
+import { ThemeProvider } from "./_components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -16,13 +17,28 @@ const geist = Geist({
   variable: "--font-geist-sans",
 });
 
+type RootLayoutProps = {
+  children: React.ReactNode;
+  header: React.ReactNode;
+};
+
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  header
+}: RootLayoutProps) {
   return (
     <html lang="en" className={`${geist.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <ThemeProvider>
+          <TRPCReactProvider>
+            <div className="min-h-screen flex flex-col">
+              {header}
+              <main className="flex-1 container mx-auto px-4 py-6">
+                {children}
+              </main>
+            </div>
+          </TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
