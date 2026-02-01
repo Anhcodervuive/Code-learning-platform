@@ -5,6 +5,7 @@ import { compare } from "bcryptjs"
 import { db } from "~/server/db";
 import { signInSchema } from "~/schemas/auth";
 import { env } from "~/env";
+import type { Role } from "generated/prisma";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -17,14 +18,14 @@ declare module "next-auth" {
     user: {
       id: string;
       // ...other properties
-      // role: UserRole;
+      role: Role;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    // ...other properties
+    role?: Role;
+  }
 }
 
 /**
@@ -80,14 +81,14 @@ export const authConfig = {
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        // token.role = user.role;
+        token.role = user.role;
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        // session.user.role = token.role as Role;
+        session.user.role = token.role as Role;
       }
       return session;
     },

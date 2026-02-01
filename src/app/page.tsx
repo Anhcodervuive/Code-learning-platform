@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { HydrateClient } from "~/trpc/server";
 
 export default async function Home() {
@@ -15,6 +16,7 @@ export default async function Home() {
             </div>
           ))}
         </div>
+        <Link href={'/admin/problems'}>Admin</Link>
       </div>
     </HydrateClient>
   );

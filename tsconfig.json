@@ -36,7 +36,9 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "generated",
+    "src"
   ],
   "exclude": ["node_modules", "generated"]
 }

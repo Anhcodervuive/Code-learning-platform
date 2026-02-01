@@ -7,7 +7,7 @@
  * need to use are documented accordingly near the end.
  */
 
-import { initTRPC, TRPCError } from "@trpc/server";
+import { initTRPC, TRPCError, type inferAsyncReturnType } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -35,7 +35,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     ...opts,
   };
 };
-
+// export type Context = inferAsyncReturnType<typeof createTRPCContext>;
 /**
  * 2. INITIALIZATION
  *
@@ -131,3 +131,11 @@ export const protectedProcedure = t.procedure
       },
     });
   });
+
+
+export const adminProcedure = t.procedure.use(({ ctx, next }) => {
+  if (ctx.session?.user.role !== "ADMIN") {
+    throw new TRPCError({ code: "FORBIDDEN" });
+  }
+  return next();
+});
