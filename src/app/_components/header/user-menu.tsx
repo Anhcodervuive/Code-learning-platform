@@ -29,7 +29,7 @@ export function UserMenu({ user }: UserMenuProps) {
                 <Button variant="ghost">{user.name ?? user.email}</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem><Link href={'/profile'}>Profile</Link></DropdownMenuItem>
                 <DropdownMenuItem className="text-destructive" onClick={handleSignout}>Sign out</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
