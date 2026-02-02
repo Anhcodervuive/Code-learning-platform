@@ -8,11 +8,11 @@ import type { CreateTestcaseInput } from "~/schemas";
 
 export default function TestcasePage() {
     const { id } = useParams<{ id: string }>();
-
+    const util = api.useUtils();
     const { data: testcases } = api.testcase.listByProblem.useQuery(id);
     const create = api.testcase.create.useMutation({
-        onSuccess() {
-            // refetch list
+        onSuccess: async () => {
+            await util.testcase.listByProblem.invalidate(id)
         },
     });
 

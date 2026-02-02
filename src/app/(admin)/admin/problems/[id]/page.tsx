@@ -1,39 +1,46 @@
-"use client";
+import { notFound } from "next/navigation";
+import { api } from "~/trpc/server";
+
+import { ProblemHeader } from "./_components/problem-header";
+import { ProblemOverview } from "./_components/problem-overview";
+import { ProblemTestcases } from "./_components/problem-testcases";
 
 export const dynamic = "force-dynamic";
 
-import { useParams, useRouter } from "next/navigation";
-import { api } from "~/trpc/react";
-import { ProblemForm } from "~/app/_components/admin/problem-form";
-import type { CreateProblemInput } from "~/schemas";
+type Props = {
+    params: Promise<{ id: string }>;
+};
 
-export default function EditProblemPage() {
-    const { id } = useParams<{ id: string }>();
-    const router = useRouter()
-    const util = api.useUtils()
-    const { data: problem, isLoading } = api.problem.getById.useQuery(id);
-    const update = api.problem.update.useMutation({
-        onSuccess: async () => {
-            await util.problem.list.invalidate()
-            router.replace(`/admin/problems`, {})
-        }
-    });
+const ProblemDetailPage = async ({ params }: Props) => {
+    const { id } = await params;
+    const problem = await api.problem.getById(id);
 
-    const handleUpdate = async (data: CreateProblemInput) => {
-        update.mutate({ id, ...data })
-    }
+    if (!problem) notFound();
 
-    if (isLoading) return <div>Loading...</div>;
-    if (!problem) return <div>Not found</div>;
+    const testcases = await api.testcase.listByProblem(id);
+
+    const hiddenCount = testcases.filter((t) => t.isHidden).length;
 
     return (
-        <div className="space-y-6">
-            <h1 className="text-2xl font-bold">Edit Problem</h1>
+        <div className="space-y-8">
+            <ProblemHeader problem={problem} />
 
-            <ProblemForm
-                defaultValues={problem}
-                onSubmit={handleUpdate}
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main content */}
+                <div className="lg:col-span-2">
+                    <ProblemOverview problem={problem} />
+                </div>
+
+                {/* Sidebar */}
+                <div>
+                    <ProblemTestcases
+                        total={testcases.length}
+                        hidden={hiddenCount}
+                    />
+                </div>
+            </div>
         </div>
     );
-}
+};
+
+export default ProblemDetailPage;

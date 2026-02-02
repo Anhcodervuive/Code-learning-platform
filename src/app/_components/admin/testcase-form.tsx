@@ -4,12 +4,15 @@ import { useForm } from "react-hook-form";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { Checkbox } from "~/components/ui/checkbox";
-import { createTestcaseSchema, type CreateTestcaseInput } from "~/schemas";
+import { createTestcaseInUISchema, type CreateTestcaseInput } from "~/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export function TestcaseForm({ onSubmit }: { onSubmit: (data: CreateTestcaseInput) => void }) {
     const form = useForm({
-        resolver: zodResolver(createTestcaseSchema),
+        resolver: zodResolver(createTestcaseInUISchema),
+        defaultValues: {
+            isHidden: false
+        },
     });
 
     return (
@@ -25,7 +28,7 @@ export function TestcaseForm({ onSubmit }: { onSubmit: (data: CreateTestcaseInpu
                 <span>Hidden test</span>
             </div>
 
-            <Button>Add Testcase</Button>
+            <Button type="submit" disabled={!form.formState.isValid || form.formState.isSubmitting}>Add Testcase</Button>
         </form>
     );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Trash2 } from "lucide-react";
+import { Info, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "~/components/ui/button";
@@ -19,8 +19,13 @@ export default function ProblemActions({ problemId }: { problemId: string }) {
 
     return (
         <div className="flex justify-end gap-2">
+            <Button asChild variant="outline">
+                <Link href={`/admin/problems/${problemId}`}>
+                    <Info className="h-4 w-4" />
+                </Link>
+            </Button>
             <Button size="sm" variant="outline" asChild>
-                <Link href={`/admin/problems/${problemId}`} className="">
+                <Link href={`/admin/problems/${problemId}/edit`} className="">
                     <Pencil className="h-4 w-4" />
                 </Link>
             </Button>
