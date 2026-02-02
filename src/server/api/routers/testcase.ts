@@ -26,4 +26,12 @@ export const testcaseRouter = createTRPCRouter({
                 where: { id: input },
             });
         }),
+
+    deleteByProblem: adminProcedure
+        .input(String)
+        .mutation(({ input, ctx }) => {
+            return ctx.db.testCase.deleteMany({
+                where: { problemId: input },
+            });
+        }),
 });

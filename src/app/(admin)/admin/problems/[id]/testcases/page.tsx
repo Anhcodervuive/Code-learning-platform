@@ -29,7 +29,7 @@ export default function TestcasePage() {
                 onSubmit={handleCreate}
             />
 
-            {testcases && <TestcaseTable data={testcases} />}
+            {testcases && <TestcaseTable data={testcases} problemId={id} />}
         </div>
     );
 }
