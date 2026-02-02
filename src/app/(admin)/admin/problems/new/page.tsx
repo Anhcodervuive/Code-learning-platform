@@ -7,9 +7,11 @@ import { api } from "~/trpc/react";
 
 export default function NewProblemPage() {
     const router = useRouter()
+    const util = api.useUtils()
     const createProblemMutation = api.problem.create.useMutation({
-        onSuccess: () => {
-            router.back()
+        onSuccess: async () => {
+            await util.problem.list.invalidate()
+            router.replace(`/admin/problems`, {})
         }
     });
 

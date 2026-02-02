@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useParams, useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 import { ProblemForm } from "~/app/_components/admin/problem-form";
@@ -8,11 +10,12 @@ import type { CreateProblemInput } from "~/schemas";
 export default function EditProblemPage() {
     const { id } = useParams<{ id: string }>();
     const router = useRouter()
-
+    const util = api.useUtils()
     const { data: problem, isLoading } = api.problem.getById.useQuery(id);
     const update = api.problem.update.useMutation({
-        onSuccess: () => {
-            router.back()
+        onSuccess: async () => {
+            await util.problem.list.invalidate()
+            router.replace(`/admin/problems`, {})
         }
     });
 

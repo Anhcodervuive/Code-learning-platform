@@ -19,6 +19,8 @@ export default function SignInPage() {
         await signIn("credentials", {
             email: values.email,
             password: values.password,
+            redirect: true,
+            redirectTo: '/'
         })
     }
 

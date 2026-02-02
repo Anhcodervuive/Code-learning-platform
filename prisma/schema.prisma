@@ -132,6 +132,14 @@ model Problem {
     difficulty Difficulty
     status     ProblemStatus @default(DRAFT)
 
+    // 🔧 Judge config
+    timeLimitMs   Int @default(3000) @map("time_limit_ms")
+    memoryLimitMb Int @default(256) @map("memory_limit_mb")
+
+    // 📘 Learning content
+    hint      String? @db.Text
+    editorial String? @db.Text
+
     createdById String @map("created_by")
     createdBy   User   @relation(fields: [createdById], references: [id])
 

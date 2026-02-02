@@ -9,6 +9,14 @@ export const createProblemSchema = z.object({
     description: z.string(),
     difficulty: ProblemDifficulty,
     status: ProblemStatus.optional(),
+
+    // judge config
+    timeLimitMs: z.coerce.number().int().positive().optional(),
+    memoryLimitMb: z.coerce.number().int().positive().optional(),
+
+    // learning content
+    hint: z.string().optional().nullable(),
+    editorial: z.string().optional().nullable(),
 });
 
 export const updateProblemSchema = createProblemSchema.extend({

@@ -1,11 +1,11 @@
-import { createTRPCRouter, adminProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, adminProcedure } from "../trpc";
 import {
     createProblemSchema,
     updateProblemSchema,
 } from "~/schemas/problem";
 
 export const problemRouter = createTRPCRouter({
-    list: publicProcedure.query(async ({ ctx }) => {
+    list: adminProcedure.query(async ({ ctx }) => {
         return ctx.db.problem.findMany({
             orderBy: { createdAt: "desc" },
         });
