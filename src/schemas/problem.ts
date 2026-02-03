@@ -25,3 +25,16 @@ export const updateProblemSchema = createProblemSchema.extend({
 
 export type CreateProblemInput = z.infer<typeof createProblemSchema>;
 export type UpdateProblemInput = z.infer<typeof updateProblemSchema>;
+
+export const problemDifficultySchema = z.enum([
+    "EASY",
+    "MEDIUM",
+    "HARD",
+]);
+
+export const problemListFilterSchema = z.object({
+    difficulty: problemDifficultySchema.optional(),
+    solved: z.boolean().optional(), // true = solved, false = unsolved
+});
+
+export type ProblemListFilter = z.infer<typeof problemListFilterSchema>;
