@@ -15,7 +15,7 @@ const ProfilePage = () => {
     const updateMutation = api.profile.update.useMutation({
         onSuccess: async () => {
             await util.profile.me.invalidate();
-            router.refresh();
+            router.push('/')
         }
     });
 
@@ -26,13 +26,9 @@ const ProfilePage = () => {
 
     if (isLoading) {
         return (
-            <div className="flex justify-between w-full">
-                <ProfileLoading />
-            </div>
+            <ProfileLoading />
         );
     }
-
-    console.log(profile);
 
     return (
         <div className="space-y-6 flex flex-col items-center">

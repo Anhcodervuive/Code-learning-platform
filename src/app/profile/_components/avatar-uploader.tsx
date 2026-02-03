@@ -18,7 +18,7 @@ export const AvatarUpload = ({ value, onChange }: Props) => {
             </Avatar>
 
             <CldUploadWidget
-                uploadPreset="avatar_upload"
+                uploadPreset="social_feed"
                 options={{ maxFiles: 1 }}
                 onSuccess={(result: CloudinaryUploadWidgetResults) => {
                     const info = result?.info as { secure_url?: string };
