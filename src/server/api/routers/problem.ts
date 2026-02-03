@@ -1,3 +1,4 @@
+import z from "zod";
 import { createTRPCRouter, adminProcedure, protectedProcedure } from "../trpc";
 import {
     createProblemSchema,
@@ -98,4 +99,24 @@ export const problemRouter = createTRPCRouter({
                 input.solved ? p.isSolved : !p.isSolved,
             );
         }),
+
+    getBySlugForUser: protectedProcedure
+        .input(z.object({ slug: z.string() }))
+        .query(async ({ ctx, input }) => {
+            return ctx.db.problem.findUnique({
+                where: {
+                    slug: input.slug,
+                    status: "PUBLISHED",
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    difficulty: true,
+                    description: true,
+                    hint: true,
+                    timeLimitMs: true,
+                    memoryLimitMb: true,
+                },
+            });
+        })
 });
