@@ -1,16 +1,14 @@
 export type SupportedLanguage =
-    | "javascript"
-    | "typescript"
-    | "python"
-    | "cpp";
+    | "JAVASCRIPT"
+    | "PYTHON"
+    | "CPP";
 
 export const LANGUAGES: {
     value: SupportedLanguage;
     label: string;
     monaco: string;
 }[] = [
-        { value: "javascript", label: "JavaScript", monaco: "javascript" },
-        { value: "typescript", label: "TypeScript", monaco: "typescript" },
-        { value: "python", label: "Python", monaco: "python" },
-        { value: "cpp", label: "C++", monaco: "cpp" },
+        { value: "JAVASCRIPT", label: "JavaScript", monaco: "javascript" },
+        { value: "PYTHON", label: "Python", monaco: "python" },
+        { value: "CPP", label: "C++", monaco: "cpp" },
     ];

@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { CodeEditor, type SupportedLanguage } from "~/app/_components/codeEditor";
 import { SolveActions } from "./solve-actions";
+import { api } from "~/trpc/react";
 
 const DEFAULT_CODE: Record<SupportedLanguage, string> = {
-    javascript: "// Write your solution here\n",
-    typescript: "// Write your solution here\n",
-    python: "# Write your solution here\n",
-    cpp: "// Write your solution here\n",
+    JAVASCRIPT: "// Write your solution here\n",
+    PYTHON: "# Write your solution here\n",
+    CPP: "// Write your solution here\n",
 };
 
 export const SolvePanel = ({
@@ -17,31 +17,41 @@ export const SolvePanel = ({
     problemId: string;
 }) => {
     const [language, setLanguage] =
-        useState<SupportedLanguage>("javascript");
-    const [code, setCode] = useState(DEFAULT_CODE.javascript);
+        useState<SupportedLanguage>("JAVASCRIPT");
+    const [code, setCode] = useState(DEFAULT_CODE.JAVASCRIPT);
+    const runCodeAPI = api.submission.run.useMutation();
 
     const handleLanguageChange = (lang: SupportedLanguage) => {
         setLanguage(lang);
         setCode(DEFAULT_CODE[lang]);
     };
 
-    return (
-        <div className="flex h-162.5 flex-col gap-3">
-            <SolveActions
-                onRun={() => {
-                    console.log("RUN", { problemId, language, code });
-                }}
-                onSubmit={() => {
-                    console.log("SUBMIT", { problemId, language, code });
-                }}
-            />
+    const handleSubmitCode = async () => {
+        console.log("RUN", { problemId, language, code });
+        await runCodeAPI.mutateAsync({
+            mode: 'ATTEMPT',
+            problemId,
+            language,
+            code,
+        });
+    };
 
+
+    return (
+        <div className="flex h-180 flex-col gap-3">
             <CodeEditor
                 value={code}
                 language={language}
                 onChange={setCode}
                 onLanguageChange={handleLanguageChange}
                 onReset={() => setCode(DEFAULT_CODE[language])}
+            />
+
+            <SolveActions
+                onRun={handleSubmitCode}
+                onSubmit={() => {
+                    console.log("SUBMIT", { problemId, language, code });
+                }}
             />
         </div>
     );

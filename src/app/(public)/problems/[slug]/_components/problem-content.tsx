@@ -9,7 +9,7 @@ export const ProblemContent = ({
     };
 }) => {
     return (
-        <div className="rounded-xl border bg-card p-6 space-y-6 overflow-auto">
+        <div className="rounded-xl border bg-card p-6 space-y-6 max-h-180 overflow-auto">
             <MarkdownRenderer content={problem.description} />
 
             {problem.hint && (
